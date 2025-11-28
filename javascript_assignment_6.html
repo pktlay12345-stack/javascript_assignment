@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Classwork: Monster Display</title>
+  <style>
+    /* Simple CSS decoration */
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      margin: 30px;
+      color: #222;
+      background: linear-gradient(180deg,#f7fbff 0%, #ffffff 100%);
+    }
+
+    .card {
+      max-width: 720px;
+      padding: 18px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(20,40,60,0.08);
+      background: white;
+      margin: 0 auto;
+    }
+
+    h2 { margin-top: 0; }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    select {
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      min-width: 220px;
+      font-size: 15px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+
+    td.label {
+      width: 26%;
+      font-weight: 600;
+      padding: 8px 10px;
+      background: #f1f5f9;
+      border-right: 1px solid #e2e8f0;
+    }
+
+    td.value {
+      padding: 8px 10px;
+    }
+
+    .monster-img {
+      display:block;
+      max-width: 150px;
+      max-height: 150px;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(10,20,40,0.08);
+      margin-top: 6px;
+    }
+
+    .muted {
+      color: #6b7280;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Monster Display</h2>
+    <p class="muted">Choose a monster from the dropdown to display its data. Choose "-" to clear.</p>
+
+    <div class="controls">
+      <label for="monsterSelect">Monster:</label>
+      <select id="monsterSelect" onchange="onMonsterChange()">
+        <!-- default option -->
+        <option value="-">-</option>
+      </select>
+    </div>
+
+    <!-- Display area -->
+    <div id="displayArea" aria-live="polite">
+      <table aria-label="Monster details">
+        <tr>
+          <td class="label">Name</td>
+          <td class="value" id="m-name"></td>
+        </tr>
+        <tr>
+          <td class="label">Type</td>
+          <td class="value" id="m-type"></td>
+        </tr>
+        <tr>
+          <td class="label">HP</td>
+          <td class="value" id="m-hp"></td>
+        </tr>
+        <tr>
+          <td class="label">Attack</td>
+          <td class="value" id="m-attack"></td>
+        </tr>
+        <tr>
+          <td class="label">Defense</td>
+          <td class="value" id="m-defense"></td>
+        </tr>
+        <tr>
+          <td class="label">Description</td>
+          <td class="value" id="m-desc"></td>
+        </tr>
+        <tr>
+          <td class="label">Image</td>
+          <td class="value" id="m-image-cell"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    /*
+      Sample JSON data for monsters.
+      Replace or extend this array with your "given JSON data" if you have a different structure.
+    */
+    const monsters = [
+      {
+        "name": "Gloomfang",
+        "type": "Shadow Beast",
+        "hp": 120,
+        "attack": 34,
+        "defense": 18,
+        "description": "A stealthy predator that hunts in moonless nights.",
+        "image": "" // optional image url (left empty for sample)
+      },
+      {
+        "name": "Pyrodrake",
+        "type": "Fire Drake",
+        "hp": 200,
+        "attack": 48,
+        "defense": 30,
+        "description": "A small drake that breathes intense embers. Vulnerable to frost.",
+        "image": ""
+      },
+      {
+        "name": "AquaSprite",
+        "type": "Elemental",
+        "hp": 85,
+        "attack": 20,
+        "defense": 12,
+        "description": "Playful and quick; can confuse foes by splitting into droplets.",
+        "image": ""
+      }
+    ];
+
+    // populate the <select> with monster names (first item already is "-")
+    const selectEl = document.getElementById('monsterSelect');
+
+    // Use forEach to create option elements. Use innerText to avoid injecting HTML.
+    monsters.forEach(mon => {
+      const opt = document.createElement('option');
+      opt.value = mon.name;      // value will be the monster name
+      opt.innerText = mon.name;  // visible label
+      selectEl.appendChild(opt);
+    });
+
+    // Helper: clear displayed fields
+    function clearDisplay() {
+      document.getElementById('m-name').innerText = '';
+      document.getElementById('m-type').innerText = '';
+      document.getElementById('m-hp').innerText = '';
+      document.getElementById('m-attack').innerText = '';
+      document.getElementById('m-defense').innerText = '';
+      document.getElementById('m-desc').innerText = '';
+      // remove any image node
+      const imgCell = document.getElementById('m-image-cell');
+      imgCell.innerHTML = ''; // safe here because we remove whatever was there
+    }
+
+    // Called when the dropdown changes
+    function onMonsterChange() {
+      const selected = selectEl.value;
+      if (selected === '-' ) {
+        clearDisplay();
+        return;
+      }
+
+      // find the monster - using for-of / for loop is fine
+      // using find() here for brevity
+      const monster = monsters.find(m => m.name === selected);
+
+      if (!monster) {
+        
+        clearDisplay();
+        return;
+      }
+
+      
+     
+      document.getElementById('m-name').innerText = monster.name;
+      document.getElementById('m-type').innerText = monster.type;
+      document.getElementById('m-hp').innerText = monster.hp;
+      document.getElementById('m-attack').innerText = monster.attack;
+      document.getElementById('m-defense').innerText = monster.defense;
+      document.getElementById('m-desc').innerText = monster.description;
+
+      
+      const imgCell = document.getElementById('m-image-cell');
+      imgCell.innerHTML = ''; 
+      if (monster.image && monster.image.trim() !== '') {
+        const img = document.createElement('img');
+        img.src = monster.image;
+        img.alt = monster.name + " image";
+        img.className = 'monster-img';
+        imgCell.appendChild(img);
+      } else {
+        imgCell.innerText = '(no image)';
+      }
+    }
+
+    
+    clearDisplay();
+  </script>
+</body>
+</html>

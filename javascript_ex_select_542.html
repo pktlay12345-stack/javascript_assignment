@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        label {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <input id="username" name="username" value="athiphap" type="text" class="class1" />
+    <input id="password" name="password" value="athiphap123" type="text" class="password" />
+    <input id="desc" name="desc" value="desc" type="text" class="class2" />
+
+    <input id="status-active" name="status" type="radio" value="active" checked />
+    <label for="status-active">Active</label>
+
+    <input id="status-inactive" name="status" type="radio" value="inactive" />
+    <label for="status-inactive">Inactive</label>
+
+    <!-- Duplicate username removed in photo -->
+    <button onclick="onClick()">Click...</button>
+
+    <script>
+
+        const e1 = document.getElementById("username");
+        console.log("e1:", e1);
+        console.log("e1 value:", e1.value);
+
+        const e2 = document.getElementsByTagName("input");
+        console.log("e2:", e2);
+        console.log("e2[0] value:", e2[0].value);
+        console.log("e2[1] value:", e2[1].value);
+
+        e2[2].value = "test...";
+
+        const e3 = document.getElementsByClassName("class2");
+        console.log("e3:", e3);
+
+        function onClick() {
+            console.log("Button clicked!");
+        }
+
+    </script>
+
+</body>
+</html>
